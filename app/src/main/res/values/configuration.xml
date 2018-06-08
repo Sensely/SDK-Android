@@ -1,0 +1,9 @@
+<resources>
+    <string name="avatarName">Xu</string>
+    <string name="avatarVoiceID">4</string>
+    <string name="avatarEngineID">3</string>
+    <string name="avatarLangID">1</string>
+    <bool name="isAnonymousMode">false</bool>
+    <string name="language">eng</string>
+    <string name="voiceRecLangID">cmn-Hans-HK</string>
+</resources>
