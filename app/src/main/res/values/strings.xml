@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SDK-Android</string>
+    <string name="password_hint">Password</string>
+    <string name="login_hint">Login</string>
 </resources>

@@ -3,6 +3,7 @@ package com.sensely.sdk.sample;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.sensely.sdk.model.Avatar;
 import com.sensely.sdk.CallBackData;
 import com.sensely.sdk.SDKLoaderAssessment;
 import com.sensely.sdk.SenselyActivity;
@@ -36,7 +38,7 @@ public class SampleLauncherActivity extends AppCompatActivity
     /**
      * Max allowed duration betwen a next "click", in milliseconds.
      */
-    private static final int MAX_CLICK_DURATION = 5000;
+    private static final int MAX_CLICK_DURATION = 1000;
     private long mLastClickTime = 0;
 
     SDKLoaderAssessment sdkLoaderAssessment;
@@ -72,6 +74,12 @@ public class SampleLauncherActivity extends AppCompatActivity
         SenselySDK senselySDK = SenselySDK.getInstance();
         senselySDK.setCallbackInvokeActivity(this);
 
+        SenselySDK.getConfigurationInstance()
+                .setAvatar(Avatar.getByName(getResources().getString(R.string.avatarName)))
+                .setVID(getResources().getString(R.string.avatarVoiceID))
+                .setEID(getResources().getString(R.string.avatarEngineID))
+                .setLID(getResources().getString(R.string.avatarLangID))
+                .setAnonymousMode(getResources().getBoolean(R.bool.isAnonymousMode));
 
         sdkLoaderAssessment = new SDKLoaderAssessment(this);
 
@@ -137,19 +145,29 @@ public class SampleLauncherActivity extends AppCompatActivity
         // For Access to next step
         SenselySDK.getConfigurationInstance()
                 .setUser(userLogin)
-                .setPassword(userPassword)
-                .setAvatarIndex(0);
+                .setPassword(userPassword);
 
         sdkLoaderAssessment.getAssessment(userLogin, userPassword);
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onError(int id, String message) {
-
+        mProgressBar.setVisibility(View.INVISIBLE);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, com.sensely.sdk.R.style.ExitAlertDialogStyle);
+        alertDialog.setTitle("Error");
+        alertDialog.setMessage(message);
+        alertDialog.setPositiveButton(android.R.string.ok,
+                (dialog, which) -> {
+                    dialog.cancel();
+                }
+        );
+        alertDialog.create().show();
     }
 
     @Override
     public void onGetAssessment(ArrayList<String> assessmentIcons, ArrayList<String> assessmentNames) {
+        mProgressBar.setVisibility(View.INVISIBLE);
 
         if (assessmentIcons.isEmpty() || assessmentNames.isEmpty()){
             return;
