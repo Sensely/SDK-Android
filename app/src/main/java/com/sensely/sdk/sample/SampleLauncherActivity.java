@@ -74,8 +74,12 @@ public class SampleLauncherActivity extends AppCompatActivity
         SenselySDK senselySDK = SenselySDK.getInstance();
         senselySDK.setCallbackInvokeActivity(this);
 
+        String avatarName = getResources().getString(R.string.avatarName);
+
+        Avatar avatar = Avatar.getByName(avatarName);
+
         SenselySDK.getConfigurationInstance()
-                .setAvatar(Avatar.getByName(getResources().getString(R.string.avatarName)))
+                .setAvatar(avatar)
                 .setVID(getResources().getString(R.string.avatarVoiceID))
                 .setEID(getResources().getString(R.string.avatarEngineID))
                 .setLID(getResources().getString(R.string.avatarLangID))
