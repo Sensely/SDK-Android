@@ -1,5 +1,6 @@
 package com.sensely.sdk.sample;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -106,7 +107,7 @@ public class SampleLauncherActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SDK_ACTIVITY_REQ) {
+        if (requestCode == SDK_ACTIVITY_REQ && resultCode == RESULT_OK) {
             String result = data.getStringExtra("result");
             tvResult.setText(result);
             tvResult.setVisibility(View.VISIBLE);
