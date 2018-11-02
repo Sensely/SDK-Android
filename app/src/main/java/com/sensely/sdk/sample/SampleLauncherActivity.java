@@ -20,6 +20,7 @@ import com.sensely.sdk.CallBackData;
 import com.sensely.sdk.SDKLoaderAssessment;
 import com.sensely.sdk.SenselyActivity;
 import com.sensely.sdk.SenselySDK;
+import static com.sensely.sdk.SenselyActivity.LOGIN_TOKEN;
 
 import java.util.ArrayList;
 
@@ -96,6 +97,7 @@ public class SampleLauncherActivity extends AppCompatActivity
         }
         mLastClickTime = SystemClock.elapsedRealtime();
         Intent intent = new Intent(this, SenselyActivity.class);
+        intent.putExtra(LOGIN_TOKEN, sdkLoaderAssessment.getToken());
         startActivityForResult(intent, SDK_ACTIVITY_REQ);
     }
 
