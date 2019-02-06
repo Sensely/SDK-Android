@@ -31,7 +31,7 @@ In addition to symptom checker interactions, partners are able to build other co
 * targetSdkVersion 27+
 
 Follow these directions:
-* Note: Android versions 4.3 (and higher) are supported
+* Note: Android versions 5.0 (and higher) are supported
 * Clone this repo
 * In Main menu of Android Studio go File->New->Import Project
 * Build and run the app
