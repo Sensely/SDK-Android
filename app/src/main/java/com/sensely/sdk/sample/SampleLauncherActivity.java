@@ -1,26 +1,35 @@
 package com.sensely.sdk.sample;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.provider.Settings;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.sensely.sdk.model.Avatar;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sensely.sdk.CallBackData;
 import com.sensely.sdk.SDKLoaderAssessment;
 import com.sensely.sdk.SenselyActivity;
 import com.sensely.sdk.SenselySDK;
-import static com.sensely.sdk.SenselyActivity.LOGIN_TOKEN;
+import com.sensely.sdk.presenters.TestingProgramPresenter;
+import com.sensely.sdk.views.WelcomeView;
+import com.sensely.sdk.model.AccessToken;
+import com.sensely.sdk.model.Avatar;
+import com.sensely.sdk.model.testingprogram.TestingProgram;
+import com.sensely.sdk.net.NetManager;
+import com.sensely.sdk.utils.LibUtils;
 
 import java.util.ArrayList;
 
@@ -33,25 +42,29 @@ import java.util.ArrayList;
 public class SampleLauncherActivity extends AppCompatActivity
         implements SenselySDK.ICallbackActivity,
         SampleAssessmentAdapter.SampleListner,
-        SDKLoaderAssessment.ILoadAssessment{
+        SDKLoaderAssessment.ILoadAssessment,
+        WelcomeView {
 
     private static final String TAG = SampleLauncherActivity.class.getSimpleName();
     private static final int SDK_ACTIVITY_REQ = 1002;
     /**
      * Max allowed duration betwen a next "click", in milliseconds.
      */
-    private static final int MAX_CLICK_DURATION = 1000;
+    private static final int MAX_CLICK_DURATION = 3000;
     private long mLastClickTime = 0;
 
     SDKLoaderAssessment sdkLoaderAssessment;
 
     private RecyclerView mRecyclerView;
-    private ProgressBar mProgressBar;
-
 
     private TextView tvResult;
     private EditText login;
     private EditText password;
+    private CheckBox checkBoxToken;
+    private FrameLayout progressBar;
+    private Button signInButton;
+
+    private TestingProgramPresenter testingProgramPresenter;
 
     // Used to load the 'native-lib' library on application startup.
     static {
@@ -66,29 +79,34 @@ public class SampleLauncherActivity extends AppCompatActivity
         tvResult = findViewById(R.id.tv_result);
         tvResult.setMovementMethod(new ScrollingMovementMethod());
         login = findViewById(R.id.login);
+        checkBoxToken = findViewById(R.id.checkBoxToken);
         password = findViewById(R.id.password);
+        progressBar = findViewById(R.id.progress_bar);
+        signInButton = findViewById(R.id.signin);
+
+        String configLogin = getString(R.string.login);
+        String configPassword = getString(R.string.password);
+
+        if (!TextUtils.isEmpty(configLogin) && !TextUtils.isEmpty(configPassword)){
+            login.setText(configLogin);
+            password.setText(configPassword);
+        }
 
         mRecyclerView = findViewById(R.id.sampleAssessmensList);
 
-        mProgressBar = findViewById(R.id.progress_net_bar);
-        mProgressBar.setVisibility(View.GONE);
-
         SenselySDK senselySDK = SenselySDK.getInstance();
         senselySDK.setCallbackInvokeActivity(this);
-
-        String avatarName = getResources().getString(R.string.avatarName);
-
-        Avatar avatar = Avatar.getByName(avatarName);
-
         SenselySDK.getConfigurationInstance()
-                .setAvatar(avatar)
-                .setVID(getResources().getString(R.string.avatarVoiceID))
-                .setEID(getResources().getString(R.string.avatarEngineID))
-                .setLID(getResources().getString(R.string.avatarLangID))
-                .setAnonymousMode(getResources().getBoolean(R.bool.isAnonymousMode));
+                .setSenselyDomainType(getString(R.string.senselyDomainType));
 
         sdkLoaderAssessment = new SDKLoaderAssessment(this);
 
+        showWait();
+
+        testingProgramPresenter = new TestingProgramPresenter(NetManager.getInstance(), this);
+
+        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        testingProgramPresenter.getTestingProgram(deviceId);
     }
 
     protected void startAssessment() {
@@ -97,8 +115,19 @@ public class SampleLauncherActivity extends AppCompatActivity
         }
         mLastClickTime = SystemClock.elapsedRealtime();
         Intent intent = new Intent(this, SenselyActivity.class);
-        intent.putExtra(LOGIN_TOKEN, sdkLoaderAssessment.getToken());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(AccessToken.ACCESS_TOKEN, NetManager.getInstance().getToken());
         startActivityForResult(intent, SDK_ACTIVITY_REQ);
+    }
+
+    public void showWait() {
+        signInButton.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void removeWait() {
+        signInButton.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -116,7 +145,7 @@ public class SampleLauncherActivity extends AppCompatActivity
             mRecyclerView.setVisibility(View.GONE);
             login.setVisibility(View.GONE);
             password.setVisibility(View.GONE);
-            findViewById(R.id.signin).setVisibility(View.GONE);
+            signInButton.setVisibility(View.GONE);
         }
     }
 
@@ -128,7 +157,7 @@ public class SampleLauncherActivity extends AppCompatActivity
             mRecyclerView.setVisibility(View.VISIBLE);
             login.setVisibility(View.VISIBLE);
             password.setVisibility(View.VISIBLE);
-            findViewById(R.id.signin).setVisibility(View.VISIBLE);
+            signInButton.setVisibility(View.VISIBLE);
         } else {
             super.onBackPressed();
         }
@@ -152,35 +181,28 @@ public class SampleLauncherActivity extends AppCompatActivity
         // For Access to next step
         SenselySDK.getConfigurationInstance()
                 .setUser(userLogin)
-                .setPassword(userPassword);
+                .setPassword(userPassword)
+                .setAvatar(Avatar.MOLLY);
 
         sdkLoaderAssessment.getAssessment(userLogin, userPassword);
-        mProgressBar.setVisibility(View.VISIBLE);
+
+        showWait();
     }
 
     @Override
     public void onError(int id, String message) {
-        mProgressBar.setVisibility(View.INVISIBLE);
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, com.sensely.sdk.R.style.ExitAlertDialogStyle);
-        alertDialog.setTitle("Error");
-        alertDialog.setMessage(message);
-        alertDialog.setPositiveButton(android.R.string.ok,
-                (dialog, which) -> {
-                    dialog.cancel();
-                }
-        );
-        alertDialog.create().show();
+        removeWait();
+        LibUtils.showMessageDialog(this, "Application Error", message, android.R.string.ok, null);
     }
 
     @Override
     public void onGetAssessment(ArrayList<String> assessmentIcons, ArrayList<String> assessmentNames) {
-        mProgressBar.setVisibility(View.INVISIBLE);
 
         if (assessmentIcons.isEmpty() || assessmentNames.isEmpty()){
             return;
         }
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
 
         ArrayList<String> menuItems = new ArrayList<>();
@@ -194,5 +216,41 @@ public class SampleLauncherActivity extends AppCompatActivity
         mRecyclerView.setAdapter(sampleAssessmentAdapter);
         sampleAssessmentAdapter.notifyDataSetChanged();
 
+        removeWait();
+    }
+
+    @Override
+    public void onTestingProgramFailure(String appErrorMessage) {
+        removeWait();
+        LibUtils.setNetworkHost(SenselySDK.getConfigurationInstance()
+                .getSenselyDomainType());
+        NetManager.getInstance().createRetrofit();
+        // Now we can login
+    }
+
+    @Override
+    public void onTestingProgramReceived(TestingProgram testingProgram) {
+        if (testingProgram.getStatus().getResult().equalsIgnoreCase("Success")) {
+
+            if (!TextUtils.isEmpty(testingProgram.getData().getServer())) {
+                LibUtils.setNetworkHost(testingProgram.getData().getServer());
+                NetManager.getInstance().createRetrofit();
+            }
+
+            if (!TextUtils.isEmpty(testingProgram.getData().getUsername()) &&
+                    !TextUtils.isEmpty(testingProgram.getData().getPassword())) {
+
+                login.setText(testingProgram.getData().getUsername());
+                password.setText(testingProgram.getData().getPassword());
+
+                LibUtils.saveToken(SampleLauncherActivity.this, new AccessToken());
+
+                onSignInClick(null);
+            } else if (!TextUtils.isEmpty(testingProgram.getData().getServer())) {
+                removeWait();
+            }
+        } else {
+            removeWait();
+        }
     }
 }

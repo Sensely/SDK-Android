@@ -26,9 +26,9 @@ In addition to symptom checker interactions, partners are able to build other co
 ## Technical quickstart
 
 ### Prerequisites
-* Android Studio 3.0+
-* minSdkVersion 19
-* targetSdkVersion 27+
+* Android Studio 3.2+
+* minSdkVersion 21
+* targetSdkVersion 28+
 
 Follow these directions:
 * Note: Android versions 5.0 (and higher) are supported
@@ -43,10 +43,9 @@ Follow these directions:
 
 The Sensely Android SDK is released under the Sensely license. See the LICENSE file for more details.
 
-[1] : https://developer.android.com/studio/build/multidex.html <br>
-[2] : https://developer.android.com <br>
-[3] : https://developer.android.com/studio/projects/add-app-module.html <br>
-[4] : https://developer.android.com/studio/projects/android-library.html#publish_multiple_variants
+[1] : https://developer.android.com <br>
+[2] : https://developer.android.com/studio/projects/add-app-module.html <br>
+[3] : https://developer.android.com/studio/projects/android-library.html#publish_multiple_variants
 
 ## Other platforms of the Sensely SDK
 * [iOS](https://github.com/Sensely/SDK-iOS/)

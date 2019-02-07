@@ -5,5 +5,8 @@
     <string name="avatarLangID">1</string>
     <bool name="isAnonymousMode">false</bool>
     <string name="language">eng</string>
-    <string name="voiceRecLangID">cmn-Hans-HK</string>
+    <string name="voiceRecLangID">en-US</string>
+    <string name="login">nas1</string>
+    <string name="password">Health12!</string>
+    <item name="senselyDomainType" type="string">.us</item>
 </resources>

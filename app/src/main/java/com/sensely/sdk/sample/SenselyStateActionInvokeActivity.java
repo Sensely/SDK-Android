@@ -1,11 +1,12 @@
 package com.sensely.sdk.sample;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.sensely.sdk.CallBackData;
 import com.sensely.sdk.SenselySDK;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SenselyStateActionInvokeActivity extends AppCompatActivity {
 
