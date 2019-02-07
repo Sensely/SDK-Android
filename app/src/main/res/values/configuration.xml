@@ -7,6 +7,6 @@
     <string name="language">eng</string>
     <string name="voiceRecLangID">en-US</string>
     <string name="login">nas1</string>
-    <string name="password">Health12!</string>
+    <string name="password"></string>
     <item name="senselyDomainType" type="string">.us</item>
 </resources>
