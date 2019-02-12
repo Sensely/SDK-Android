@@ -60,7 +60,6 @@ public class SampleLauncherActivity extends AppCompatActivity
     private TextView tvResult;
     private EditText login;
     private EditText password;
-    private CheckBox checkBoxToken;
     private FrameLayout progressBar;
     private Button signInButton;
 
@@ -79,16 +78,23 @@ public class SampleLauncherActivity extends AppCompatActivity
         tvResult = findViewById(R.id.tv_result);
         tvResult.setMovementMethod(new ScrollingMovementMethod());
         login = findViewById(R.id.login);
-        checkBoxToken = findViewById(R.id.checkBoxToken);
         password = findViewById(R.id.password);
         progressBar = findViewById(R.id.progress_bar);
         signInButton = findViewById(R.id.signin);
 
+
+        login.setVisibility(View.VISIBLE);
+        password.setVisibility(View.VISIBLE);
+        signInButton.setVisibility(View.VISIBLE);
+
         String configLogin = getString(R.string.login);
         String configPassword = getString(R.string.password);
 
-        if (!TextUtils.isEmpty(configLogin) && !TextUtils.isEmpty(configPassword)){
+        if (!TextUtils.isEmpty(configLogin)){
             login.setText(configLogin);
+        }
+
+        if (!TextUtils.isEmpty(configPassword)){
             password.setText(configPassword);
         }
 
