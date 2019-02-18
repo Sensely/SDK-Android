@@ -60,6 +60,7 @@ public class SampleLauncherActivity extends AppCompatActivity
     private TextView tvResult;
     private EditText login;
     private EditText password;
+    private EditText jsonForUserInfo;
     private FrameLayout progressBar;
     private Button signInButton;
 
@@ -86,6 +87,10 @@ public class SampleLauncherActivity extends AppCompatActivity
         login.setVisibility(View.VISIBLE);
         password.setVisibility(View.VISIBLE);
         signInButton.setVisibility(View.VISIBLE);
+
+        jsonForUserInfo = findViewById(R.id.jsonForUserInfo);
+        String userInfo = "{\"userInfo\":{\"gender\":\"F\",\"dob\":\"1980-10-30\"}}";
+        jsonForUserInfo.setText(userInfo);
 
         String configLogin = getString(R.string.login);
         String configPassword = getString(R.string.password);
@@ -123,6 +128,7 @@ public class SampleLauncherActivity extends AppCompatActivity
         Intent intent = new Intent(this, SenselyActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(AccessToken.ACCESS_TOKEN, NetManager.getInstance().getToken());
+        intent.putExtra(SenselyActivity.USER_INFO, jsonForUserInfo.getText().toString());
         startActivityForResult(intent, SDK_ACTIVITY_REQ);
     }
 
