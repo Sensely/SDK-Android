@@ -3,7 +3,6 @@ package com.sensely.sdk.sample;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.Settings;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,11 +20,7 @@ import com.sensely.sdk.CallBackData;
 import com.sensely.sdk.SDKLoaderAssessment;
 import com.sensely.sdk.SenselyActivity;
 import com.sensely.sdk.SenselySDK;
-import com.sensely.sdk.presenters.TestingProgramPresenter;
-import com.sensely.sdk.views.WelcomeView;
 import com.sensely.sdk.model.AccessToken;
-import com.sensely.sdk.model.Avatar;
-import com.sensely.sdk.model.testingprogram.TestingProgram;
 import com.sensely.sdk.net.NetManager;
 import com.sensely.sdk.utils.LibUtils;
 
@@ -62,11 +57,6 @@ public class SampleLauncherActivity extends AppCompatActivity
     private EditText jsonForUserInfo;
     private FrameLayout progressBar;
     private Button signInButton;
-
-    // Used to load the 'native-lib' library on application startup.
-    static {
-        System.loadLibrary("nativestatemachine");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
