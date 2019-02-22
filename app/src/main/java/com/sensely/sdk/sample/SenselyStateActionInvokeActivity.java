@@ -1,12 +1,11 @@
 package com.sensely.sdk.sample;
 
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
 import com.sensely.sdk.CallBackData;
 import com.sensely.sdk.SenselySDK;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class SenselyStateActionInvokeActivity extends AppCompatActivity {
 
@@ -21,7 +20,7 @@ public class SenselyStateActionInvokeActivity extends AppCompatActivity {
 
         if (SenselySDK.getConsumerActions() != null) {
             CallBackData callBackData = new CallBackData();
-            //callBackData.setResult("Success");
+            //callBackData.setResult( StateAction.SUCESS);
             callBackData.setSampleResult();
             SenselySDK.getConsumerActions().resultOfInvokeCallback(callBackData);
         }

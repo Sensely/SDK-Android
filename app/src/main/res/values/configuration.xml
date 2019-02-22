@@ -1,5 +1,4 @@
 <resources>
-    <string name="avatarName">Kay</string>
     <string name="avatarVoiceID">4</string>
     <string name="avatarEngineID">3</string>
     <string name="avatarLangID">1</string>
