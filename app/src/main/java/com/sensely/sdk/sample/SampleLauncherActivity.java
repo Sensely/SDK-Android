@@ -16,10 +16,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.sensely.sdk.CallBackData;
-import com.sensely.sdk.SDKLoaderAssessment;
-import com.sensely.sdk.SenselyActivity;
-import com.sensely.sdk.SenselySDK;
+import com.sensely.sdk.api.CallBackData;
+import com.sensely.sdk.api.SDKLoaderAssessment;
+import com.sensely.sdk.api.SenselyActivity;
+import com.sensely.sdk.api.SenselySDK;
 import com.sensely.sdk.model.AccessToken;
 import com.sensely.sdk.net.NetManager;
 import com.sensely.sdk.utils.LibUtils;

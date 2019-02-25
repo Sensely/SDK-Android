@@ -4,8 +4,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
-import com.sensely.sdk.CallBackData;
-import com.sensely.sdk.SenselySDK;
+import com.sensely.sdk.api.CallBackData;
+import com.sensely.sdk.api.SenselySDK;
 
 public class SenselyStateActionInvokeActivity extends AppCompatActivity {
 
