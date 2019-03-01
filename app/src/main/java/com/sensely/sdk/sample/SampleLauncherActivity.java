@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sensely.sdk.api.CallBackData;
 import com.sensely.sdk.api.SDKLoaderAssessment;
@@ -22,17 +23,18 @@ import com.sensely.sdk.api.SenselyActivity;
 import com.sensely.sdk.api.SenselySDK;
 import com.sensely.sdk.model.AccessToken;
 import com.sensely.sdk.net.NetManager;
-import com.sensely.sdk.utils.LibUtils;
 
 import java.util.ArrayList;
 
 /**
-
-    @author Sensely 2019
-
-    Sample Using Sensely SDK
-
-
+ *
+ * @author Sensely 2019
+ *
+ *
+ *
+ * Sample Using Sensely SDK
+ *
+ *
  */
 public class SampleLauncherActivity extends AppCompatActivity
         implements SenselySDK.ICallbackActivity,
@@ -97,6 +99,14 @@ public class SampleLauncherActivity extends AppCompatActivity
         removeWait();
     }
 
+    /**
+     *
+     * Start Assessment by index in Assessment list
+     * See description SenselyActivity for detail
+     *
+     * @param indexAssessment
+     *
+     */
     protected void startAssessment(int indexAssesment) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < MAX_CLICK_DURATION) {
             return;
@@ -121,12 +131,27 @@ public class SampleLauncherActivity extends AppCompatActivity
         progressBar.setVisibility(View.GONE);
     }
 
+    /**
+     *
+     * Callback from Assessment
+     *
+     *
+     * @param callBackData
+     */
     @Override
     public void onSenselyResolveOnInvoke(CallBackData callBackData) {
         Intent intent = new Intent(this, SenselyStateActionInvokeActivity.class);
         startActivity(intent);
     }
 
+    /**
+     *
+     * Result after close Assessment
+     *
+     * @param requestCode id involved. SDK_ACTIVITY_REQ
+     * @param resultCode RESULT_OK or cancel
+     * @param data Intent with result if resultCode is RESULT_OK
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SDK_ACTIVITY_REQ && resultCode == RESULT_OK) {
@@ -176,12 +201,31 @@ public class SampleLauncherActivity extends AppCompatActivity
         showWait();
     }
 
+    /**
+     *
+     * Error callback if load assessment from Server was unsuccessful
+     *
+     *
+     * @param id        Error id.
+     *                  SDKLoaderAssessment.INVALID_LOGIN_PASSWORD_ERROR
+     *                  SDKLoaderAssessment.GET_ASSESSMENT_ERROR
+     *
+     * @param message   Error message
+     */
     @Override
     public void onError(int id, String message) {
         removeWait();
-        LibUtils.showMessageDialog(this, "Application Error", message, android.R.string.ok, null);
+        Toast.makeText(this, "Application Error : " + message,
+                Toast.LENGTH_LONG).show();
     }
 
+    /**
+     *
+     * Callback with List of assessmentIcons and assessmentNames
+     *
+     * @param assessmentIcons
+     * @param assessmentNames
+     */
     @Override
     public void onGetAssessment(ArrayList<String> assessmentIcons, ArrayList<String> assessmentNames) {
 
