@@ -22,7 +22,6 @@ import com.sensely.sdk.api.SDKLoaderAssessment;
 import com.sensely.sdk.api.SenselyActivity;
 import com.sensely.sdk.api.SenselySDK;
 import com.sensely.sdk.model.AccessToken;
-import com.sensely.sdk.net.NetManager;
 
 import java.util.ArrayList;
 
@@ -104,7 +103,7 @@ public class SampleLauncherActivity extends AppCompatActivity
      * Start Assessment by index in Assessment list
      * See description SenselyActivity for detail
      *
-     * @param indexAssessment
+     * @param indexAssesment
      *
      */
     protected void startAssessment(int indexAssesment) {
@@ -114,10 +113,10 @@ public class SampleLauncherActivity extends AppCompatActivity
         mLastClickTime = SystemClock.elapsedRealtime();
         Intent intent = new Intent(this, SenselyActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(AccessToken.ACCESS_TOKEN, NetManager.getInstance().getToken());
+        intent.putExtra(AccessToken.ACCESS_TOKEN, sdkLoaderAssessment.getToken());
         intent.putExtra(SenselyActivity.USER_INFO, jsonForUserInfo.getText().toString());
         intent.putExtra(SenselyActivity.ASSESSMENT_INDEX, indexAssesment);
-        intent.putExtra(SenselyActivity.AVATAR_INDEX, 28);
+        intent.putExtra(SenselyActivity.AVATAR_INDEX, 23);
         startActivityForResult(intent, SDK_ACTIVITY_REQ);
     }
 
