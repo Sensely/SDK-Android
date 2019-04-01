@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import com.sensely.sdk.api.SDKLoaderAssessment;
 import com.sensely.sdk.api.SenselyActivity;
 import com.sensely.sdk.api.SenselySDK;
 import com.sensely.sdk.model.AccessToken;
+import com.sensely.sdk.utils.ExtendedDataHolder;
 
 import java.util.ArrayList;
 
@@ -58,6 +60,7 @@ public class SampleLauncherActivity extends AppCompatActivity
     private EditText jsonForUserInfo;
     private FrameLayout progressBar;
     private Button signInButton;
+    private boolean anonimousMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,7 @@ public class SampleLauncherActivity extends AppCompatActivity
         password = findViewById(R.id.password);
         progressBar = findViewById(R.id.progress_bar);
         signInButton = findViewById(R.id.signin);
+
         jsonForUserInfo = findViewById(R.id.jsonForUserInfo);
         String userInfo = "{\"userInfo\":{\"gender\":\"F\",\"dob\":\"1980-10-30\"}}";
 //        String userInfo = "{\"userInfo\":{\"dob\":\"2019-01-01\",\"favorite_color\":\"玫瑰\"}}";
@@ -112,11 +116,11 @@ public class SampleLauncherActivity extends AppCompatActivity
         }
         mLastClickTime = SystemClock.elapsedRealtime();
         Intent intent = new Intent(this, SenselyActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(AccessToken.ACCESS_TOKEN, sdkLoaderAssessment.getToken());
         intent.putExtra(SenselyActivity.USER_INFO, jsonForUserInfo.getText().toString());
         intent.putExtra(SenselyActivity.ASSESSMENT_INDEX, indexAssesment);
-        intent.putExtra(SenselyActivity.AVATAR_INDEX, 23);
+        intent.putExtra(SenselyActivity.ANONYMOUS_MODE, anonimousMode);
+        intent.putExtra(SenselyActivity.AVATAR_INDEX, 28);
         startActivityForResult(intent, SDK_ACTIVITY_REQ);
     }
 
@@ -154,8 +158,15 @@ public class SampleLauncherActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == SDK_ACTIVITY_REQ && resultCode == RESULT_OK) {
-            String result = data.getStringExtra("result");
-            tvResult.setText(result);
+            ExtendedDataHolder extras = ExtendedDataHolder.getInstance();
+
+            if (extras.hasExtra("result")) {
+                String result = (String) extras.getExtra("result");
+                extras.removeExtra("result");
+
+                tvResult.setText(result);
+            }
+
             tvResult.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.GONE);
             login.setVisibility(View.GONE);

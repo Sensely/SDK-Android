@@ -10,8 +10,8 @@ android {
         applicationId "com.sensely.sample"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 200001
-        versionName "2.0.1"
+        versionCode 200002
+        versionName "2.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
