@@ -41,7 +41,7 @@ Follow these directions:
 
 ## License
 
-The Sensely Android SDK is released under the Sensely license. See the LICENSE file for more details.
+The Sensely Android SDK is released under the Sensely license. See the [LICENSE](https://github.com/Sensely/SDK-iOS/blob/master/LICENSE) file for more details.
 
 [1] : https://developer.android.com <br>
 [2] : https://developer.android.com/studio/projects/add-app-module.html <br>
