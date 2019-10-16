@@ -120,7 +120,6 @@ public class SampleLauncherActivity extends AppCompatActivity
         intent.putExtra(SenselyActivity.USER_INFO, jsonForUserInfo.getText().toString());
         intent.putExtra(SenselyActivity.ASSESSMENT_INDEX, indexAssesment);
         intent.putExtra(SenselyActivity.ANONYMOUS_MODE, anonimousMode);
-        intent.putExtra(SenselyActivity.AVATAR_INDEX, 28);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivityForResult(intent, SDK_ACTIVITY_REQ);
     }
