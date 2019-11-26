@@ -72,7 +72,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-base:$gmsPlayServices"
     implementation "com.google.android.gms:play-services-auth:$gmsPlayServices"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
     implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
