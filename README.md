@@ -1,6 +1,6 @@
 # Sensely Android Conversational SDK
 
-<a href="https://tinyurl.com/senselysdk"><img src="https://cl.ly/ca1a088639e6/request-access-button.png" alt="Request access" width="157"></a>
+<a href="mailto:info@sensely.com"><img src="https://cl.ly/ca1a088639e6/request-access-button.png" alt="Request access" width="157"></a>
 
 The Sensely Android SDK is designed to allow you to easily incorporate custom avatar technology and conversational content in your Android app. Start using the SDK today to leverage the power of conversational language interfaces. The avatar supports both voice and text options, allowing you to intelligently communicate with your patient and insurance plan member populations.
 
@@ -37,7 +37,7 @@ Follow these directions:
 * Build and run the app
 * When the app loads, provide your username and password to see available conversations - you can request a demo license to get access.
 
-<a href="https://tinyurl.com/senselysdk"><img src="https://cl.ly/ca1a088639e6/request-access-button.png" alt="Request access" width="157"></a>
+<a href="mailto:info@sensely.com"><img src="https://cl.ly/ca1a088639e6/request-access-button.png" alt="Request access" width="157"></a>
 
 ## License
 
