@@ -36,11 +36,11 @@ Follow these directions:
 * Build and run the app
 * When the app loads, provide your username and password to see available conversations - you can request a demo license to get access.
 
-<a href="mailto:info@sensely.com"><img src="https://cl.ly/ca1a088639e6/request-access-button.png" alt="Request access" width="157"></a>
 
 ## Full Documentation and more details
 
   Contact Sensely for full SDK documentation, including sample code to integrate.
+  
   <a href="mailto:info@sensely.com"><img src="https://cl.ly/ca1a088639e6/request-access-button.png" alt="Request access" width="157"></a>
 
 ## License
