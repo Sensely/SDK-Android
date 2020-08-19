@@ -22,6 +22,7 @@ import com.sensely.sdk.api.CallBackData;
 import com.sensely.sdk.api.SDKLoaderAssessment;
 import com.sensely.sdk.api.SenselyActivity;
 import com.sensely.sdk.api.SenselySDK;
+import com.sensely.sdk.api.SenselyWidget;
 import com.sensely.sdk.model.AccessToken;
 import com.sensely.sdk.utils.ExtendedDataHolder;
 
@@ -57,10 +58,13 @@ public class SampleLauncherActivity extends AppCompatActivity
     private TextView tvResult;
     private EditText login;
     private EditText password;
+    private EditText language;
     private EditText jsonForUserInfo;
+    private EditText procedureId;
     private FrameLayout progressBar;
     private Button signInButton;
-    private boolean anonimousMode = false;
+    private Button startSenselyWidgetButton;
+    private CheckBox anonymousMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +75,13 @@ public class SampleLauncherActivity extends AppCompatActivity
         tvResult.setMovementMethod(new ScrollingMovementMethod());
         login = findViewById(R.id.login);
         password = findViewById(R.id.password);
+        language = findViewById(R.id.language);
+        procedureId = findViewById(R.id.procedure_id);
         progressBar = findViewById(R.id.progress_bar);
         signInButton = findViewById(R.id.signin);
+        startSenselyWidgetButton = findViewById(R.id.start_sensely_widget);
+
+        anonymousMode = findViewById(R.id.anonymousMode);
 
         jsonForUserInfo = findViewById(R.id.jsonForUserInfo);
         String userInfo = "{\"userInfo\":{\"gender\":\"F\",\"dob\":\"1980-10-30\"}}";
@@ -81,6 +90,7 @@ public class SampleLauncherActivity extends AppCompatActivity
 
         String configLogin = getString(R.string.login);
         String configPassword = getString(R.string.password);
+        String configProcedureId = getString(R.string.procedureId);
 
         if (!TextUtils.isEmpty(configLogin)) {
             login.setText(configLogin);
@@ -88,6 +98,10 @@ public class SampleLauncherActivity extends AppCompatActivity
 
         if (!TextUtils.isEmpty(configPassword)) {
             password.setText(configPassword);
+        }
+
+        if (!TextUtils.isEmpty(configProcedureId)) {
+            procedureId.setText(configProcedureId);
         }
 
         mRecyclerView = findViewById(R.id.sampleAssessmensList);
@@ -107,10 +121,10 @@ public class SampleLauncherActivity extends AppCompatActivity
      * Start Assessment by index in Assessment list
      * See description SenselyActivity for detail
      *
-     * @param indexAssesment
+     * @param indexAssessment
      *
      */
-    protected void startAssessment(int indexAssesment) {
+    protected void startAssessment(int indexAssessment) {
         if (SystemClock.elapsedRealtime() - mLastClickTime < MAX_CLICK_DURATION) {
             return;
         }
@@ -118,19 +132,17 @@ public class SampleLauncherActivity extends AppCompatActivity
         Intent intent = new Intent(this, SenselyActivity.class);
         intent.putExtra(AccessToken.ACCESS_TOKEN, sdkLoaderAssessment.getToken());
         intent.putExtra(SenselyActivity.USER_INFO, jsonForUserInfo.getText().toString());
-        intent.putExtra(SenselyActivity.ASSESSMENT_INDEX, indexAssesment);
-        intent.putExtra(SenselyActivity.ANONYMOUS_MODE, anonimousMode);
+        intent.putExtra(SenselyActivity.ASSESSMENT_INDEX, indexAssessment);
+        intent.putExtra(SenselyActivity.ANONYMOUS_MODE, anonymousMode.isChecked());
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivityForResult(intent, SDK_ACTIVITY_REQ);
     }
 
     public void showWait() {
-        signInButton.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     public void removeWait() {
-        signInButton.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
     }
 
@@ -171,18 +183,27 @@ public class SampleLauncherActivity extends AppCompatActivity
             mRecyclerView.setVisibility(View.GONE);
             login.setVisibility(View.GONE);
             password.setVisibility(View.GONE);
+            language.setVisibility(View.GONE);
+            procedureId.setVisibility(View.GONE);
+            jsonForUserInfo.setVisibility(View.GONE);
+            anonymousMode.setVisibility(View.GONE);
+            startSenselyWidgetButton.setVisibility(View.GONE);
             signInButton.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onBackPressed() {
-        // super.onBackPressed();
         if (tvResult.getVisibility() == View.VISIBLE) {
             tvResult.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);
             login.setVisibility(View.VISIBLE);
             password.setVisibility(View.VISIBLE);
+            language.setVisibility(View.VISIBLE);
+            procedureId.setVisibility(View.VISIBLE);
+            jsonForUserInfo.setVisibility(View.VISIBLE);
+            anonymousMode.setVisibility(View.VISIBLE);
+            startSenselyWidgetButton.setVisibility(View.VISIBLE);
             signInButton.setVisibility(View.VISIBLE);
         } else {
             super.onBackPressed();
@@ -197,6 +218,7 @@ public class SampleLauncherActivity extends AppCompatActivity
     public void onSignInClick(View view) {
         String userLogin = login.getText().toString().trim();
         String userPassword = password.getText().toString().trim();
+        String userLanguage = language.getText().toString().trim();
 
         if (TextUtils.isEmpty(userLogin)) {
             return;
@@ -206,7 +228,7 @@ public class SampleLauncherActivity extends AppCompatActivity
             return;
         }
 
-        sdkLoaderAssessment.getAssessment(userLogin, userPassword);
+        sdkLoaderAssessment.getAssessment(userLogin, userPassword, userLanguage);
 
         showWait();
     }
@@ -260,4 +282,49 @@ public class SampleLauncherActivity extends AppCompatActivity
         removeWait();
     }
 
+    public void startSenselyWidget(View view) {
+        showWait();
+
+        SenselyWidget.initialize(
+                login.getText().toString().trim(),
+                password.getText().toString().trim(),
+                language.getText().toString().trim(),
+                procedureId.getText().toString().trim(),
+                anonymousMode.isChecked(),
+                jsonForUserInfo.getText().toString(),
+                this,
+                SDK_ACTIVITY_REQ,
+                new SenselyWidget.ISenselyWidgetListener() {
+                    @Override
+                    public void onError(int errorCode) {
+                        removeWait();
+
+                        CharSequence errorMessage = "Unknown error";
+
+                        switch (errorCode) {
+                            case SenselyWidget.INVALID_LOGIN_PASSWORD_ERROR:
+                                errorMessage = "Incorrect login or password";
+                                break;
+                            case SenselyWidget.LOADING_ASSESSMENT_LIST_ERROR:
+                                errorMessage = "Error while loading the assessment list";
+                                break;
+                            case SenselyWidget.EMPTY_ASSESSMENT_LIST_ERROR:
+                                errorMessage = "There are no assessments for this user";
+                                break;
+                            case SenselyWidget.INVALID_PROCEDURE_ID_ERROR:
+                                errorMessage = "Incorrect Procedure Id";
+                                break;
+                        }
+
+                        Toast.makeText(SampleLauncherActivity.this, errorMessage,
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        removeWait();
+                    }
+                }
+        );
+    }
 }

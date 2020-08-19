@@ -10,8 +10,8 @@ android {
         applicationId "com.sensely.sample"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 300702
-        versionName "3.7.2"
+        versionCode 300801
+        versionName "3.8.1"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -52,21 +52,32 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.squareup.picasso:picasso:$picasso_version"
-    implementation "com.google.code.gson:gson:$gson_version"
-    implementation 'androidx.cardview:cardview:1.0.0'
+    testImplementation 'junit:junit:4.12'
+
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
 
-    implementation 'androidx.annotation:annotation:1.0.1'
+    implementation "com.squareup.picasso:picasso:$picasso_version"
+    implementation "com.google.code.gson:gson:$gson_version"
 
-    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
 
-    implementation 'com.google.maps.android:android-maps-utils:0.5'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+
     implementation "com.jakewharton.timber:timber:$timber_version"
     implementation "com.google.android:flexbox:$flexbox_version"
+    implementation 'com.nuance:speechkit:2.2.4@aar'
 
+    implementation 'com.google.maps.android:android-maps-utils:0.5'
     implementation "com.google.android.gms:play-services-maps:$gmsPlayServicesMaps"
 
     implementation "com.google.android.gms:play-services-base:$gmsPlayServices"
@@ -74,21 +85,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
-    implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version"
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    implementation "commons-codec:commons-codec:1.11"
-
     implementation 'io.grpc:grpc-okhttp:1.13.1'
     implementation 'com.google.cloud:google-cloud-speech:0.61.0-beta'
-
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation 'com.github.dmytrodanylyk.shadow-layout:library:1.0.3'
     implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
+
+    implementation 'com.github.wendux:WebViewJavascriptBridge:master-SNAPSHOT'
 
     implementation (name: 'sdk-release', ext: 'aar')
 

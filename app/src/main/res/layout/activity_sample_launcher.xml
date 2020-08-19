@@ -7,64 +7,108 @@
     android:background="@color/colorWhite"
     tools:context=".SampleLauncherActivity">
 
-    <com.sensely.sdk.recyclerviews.TransparentHeaderRecyclerView
-        android:id="@+id/sampleAssessmensList"
-        android:layout_width="0dp"
+    <EditText
+        android:id="@+id/login"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="Login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:hint="Login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sampleAssessmensList" />
-
-    <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         android:hint="Password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login" />
 
     <EditText
-        android:id="@+id/jsonForUserInfo"
+        android:id="@+id/language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:hint="Language"
+        android:text="ar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
 
-    <Button
-        android:id="@+id/signin"
+    <EditText
+        android:id="@+id/jsonForUserInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="User Info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/language"/>
+
+    <EditText
+        android:id="@+id/procedure_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="Procedure Id"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/jsonForUserInfo"/>
+
+    <CheckBox
+        android:id="@+id/anonymousMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="AnonimousMode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/procedure_id"/>
+
+    <Button
+        android:id="@+id/start_sensely_widget"
+        android:text="Start Sensely Widget"
+        android:onClick="startSenselyWidget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
+        android:stateListAnimator="@null"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/anonymousMode"/>
+
+    <Button
+        android:id="@+id/signin"
         android:onClick="onSignInClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:stateListAnimator="@null"
         android:text="Sign In"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/jsonForUserInfo" />
+        app:layout_constraintTop_toBottomOf="@+id/start_sensely_widget" />
+
 
     <ScrollView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
@@ -80,11 +124,20 @@
         <TextView
             android:id="@+id/tv_result"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:scrollbars="vertical"
             android:visibility="invisible" />
 
     </ScrollView>
+
+    <com.sensely.sdk.recyclerviews.TransparentHeaderRecyclerView
+        android:id="@+id/sampleAssessmensList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signin"/>
 
     <include
         android:id="@+id/progress_bar"
@@ -93,7 +146,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

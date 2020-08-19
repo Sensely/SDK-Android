@@ -7,5 +7,6 @@
     <string name="voiceRecLangID">en-US</string>
     <string name="login">testuserinfo</string>
     <string name="password"></string>
+    <string name="procedureId">5c6f1f6462829</string>
     <item name="senselyDomainType" type="string">.us</item>
 </resources>
