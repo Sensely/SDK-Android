@@ -28,6 +28,8 @@ import com.sensely.sdk.utils.ExtendedDataHolder;
 
 import java.util.ArrayList;
 
+import kotlin.Unit;
+
 /**
  *
  * @author Sensely 2019
@@ -169,6 +171,8 @@ public class SampleLauncherActivity extends AppCompatActivity
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == SDK_ACTIVITY_REQ && resultCode == RESULT_OK) {
             ExtendedDataHolder extras = ExtendedDataHolder.getInstance();
 
@@ -285,46 +289,49 @@ public class SampleLauncherActivity extends AppCompatActivity
     public void startSenselyWidget(View view) {
         showWait();
 
-        SenselyWidget.initialize(
-                login.getText().toString().trim(),
-                password.getText().toString().trim(),
-                language.getText().toString().trim(),
-                procedureId.getText().toString().trim(),
-                anonymousMode.isChecked(),
-                jsonForUserInfo.getText().toString(),
+        SenselyWidget.INSTANCE.initialize(
                 this,
                 SDK_ACTIVITY_REQ,
-                new SenselyWidget.ISenselyWidgetListener() {
-                    @Override
-                    public void onError(int errorCode) {
-                        removeWait();
-
-                        CharSequence errorMessage = "Unknown error";
-
-                        switch (errorCode) {
-                            case SenselyWidget.INVALID_LOGIN_PASSWORD_ERROR:
-                                errorMessage = "Incorrect login or password";
-                                break;
-                            case SenselyWidget.LOADING_ASSESSMENT_LIST_ERROR:
-                                errorMessage = "Error while loading the assessment list";
-                                break;
-                            case SenselyWidget.EMPTY_ASSESSMENT_LIST_ERROR:
-                                errorMessage = "There are no assessments for this user";
-                                break;
-                            case SenselyWidget.INVALID_PROCEDURE_ID_ERROR:
-                                errorMessage = "Incorrect Procedure Id";
-                                break;
-                        }
-
-                        Toast.makeText(SampleLauncherActivity.this, errorMessage,
-                                Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        removeWait();
-                    }
-                }
+                login.getText().toString().trim(),
+                password.getText().toString().trim(),
+                procedureId.getText().toString().trim(),
+                language.getText().toString().trim(),
+                anonymousMode.isChecked(),
+                jsonForUserInfo.getText().toString(),
+                this::widgetInitializationComplete,
+                this::widgetInitializationError
         );
+    }
+
+    public Unit widgetInitializationComplete() {
+        removeWait();
+
+        return Unit.INSTANCE;
+    }
+
+    public Unit widgetInitializationError(int errorCode) {
+        removeWait();
+
+        CharSequence errorMessage = "Unknown error";
+
+        switch (errorCode) {
+            case SenselyWidget.INVALID_LOGIN_PASSWORD_ERROR:
+                errorMessage = "Incorrect login or password";
+                break;
+            case SenselyWidget.LOADING_ASSESSMENT_LIST_ERROR:
+                errorMessage = "Error while loading the assessment list";
+                break;
+            case SenselyWidget.EMPTY_ASSESSMENT_LIST_ERROR:
+                errorMessage = "There are no assessments for this user";
+                break;
+            case SenselyWidget.INVALID_PROCEDURE_ID_ERROR:
+                errorMessage = "Incorrect Procedure Id";
+                break;
+        }
+
+        Toast.makeText(SampleLauncherActivity.this, errorMessage,
+                Toast.LENGTH_LONG).show();
+
+        return Unit.INSTANCE;
     }
 }
