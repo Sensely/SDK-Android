@@ -1,17 +1,17 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'kotlin-android'
 
 android {
 
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 30
+    buildToolsVersion '30.0.2'
     flavorDimensions "default"
     defaultConfig {
         applicationId "com.sensely.sample"
         minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 300801
-        versionName "3.8.1"
+        targetSdkVersion 30
+        versionCode 300900
+        versionName "3.9"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -19,10 +19,21 @@ android {
             }
         }
     }
+
+    signingConfigs {
+        release {
+            storeFile file('keystore.jks')
+            storePassword '123456'
+            keyAlias 'key0'
+            keyPassword '123456'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
@@ -50,10 +61,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    testImplementation 'junit:junit:4.12'
-
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -83,10 +90,9 @@ dependencies {
     implementation "com.google.android.gms:play-services-base:$gmsPlayServices"
     implementation "com.google.android.gms:play-services-auth:$gmsPlayServices"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 
-    implementation 'io.grpc:grpc-okhttp:1.13.1'
-    implementation 'com.google.cloud:google-cloud-speech:0.61.0-beta'
+    implementation 'io.grpc:grpc-okhttp:1.31.1'
+    implementation 'com.google.cloud:google-cloud-speech:1.24.0'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation 'com.github.dmytrodanylyk.shadow-layout:library:1.0.3'
     implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
