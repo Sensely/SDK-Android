@@ -19,8 +19,9 @@ class SenselyWidgetSampleActivityKotlin : AppCompatActivity() {
     private lateinit var passwordEditText: EditText
     private lateinit var procedureIdEditText: EditText
     private lateinit var languageEditText: EditText
-    private lateinit var themeEditText: EditText
     private lateinit var userInfoEditText: EditText
+    private lateinit var themeEditText: EditText
+    private lateinit var regionEditText: EditText
     private lateinit var resultsView: View
     private lateinit var resultsTextView: TextView
     private lateinit var resultsTabLayout: TabLayout
@@ -37,8 +38,9 @@ class SenselyWidgetSampleActivityKotlin : AppCompatActivity() {
         passwordEditText = findViewById(R.id.passwordEditText)
         procedureIdEditText = findViewById(R.id.procedureIdEditText)
         languageEditText = findViewById(R.id.languageEditText)
-        themeEditText = findViewById(R.id.themeEditText)
         userInfoEditText = findViewById(R.id.userInfoEditText)
+        themeEditText = findViewById(R.id.themeEditText)
+        regionEditText = findViewById(R.id.regionEditText)
 
         resultsView = findViewById(R.id.resultsView)
         resultsTextView = findViewById(R.id.resultsTextView)
@@ -120,19 +122,20 @@ class SenselyWidgetSampleActivityKotlin : AppCompatActivity() {
 
     fun startSenselyWidget(view: View?) {
         showProgressBar()
-        SenselyWidget.initialize(
-                this,
-                SDK_ACTIVITY_REQ,
-                loginEditText.text.toString().trim { it <= ' ' },
-                passwordEditText.text.toString().trim { it <= ' ' },
-                procedureIdEditText.text.toString().trim { it <= ' ' },
-                languageEditText.text.toString().trim { it <= ' ' },
-                themeEditText.text.toString().trim { it <= ' ' },
-                userInfoEditText.text.toString().trim { it <= ' ' },
-                this::widgetInitializationComplete,
-                this::widgetInitializationError
-        )
 
+        SenselyWidget.initialize(
+                context = this,
+                userName = loginEditText.text.toString().trim { it <= ' ' },
+                password = passwordEditText.text.toString().trim { it <= ' ' },
+                procedureId = procedureIdEditText.text.toString().trim { it <= ' ' },
+                language = languageEditText.text.toString().trim { it <= ' ' },
+                conversationData = userInfoEditText.text.toString().trim { it <= ' ' },
+                theme = themeEditText.text.toString().trim { it <= ' ' },
+                region = regionEditText.text.toString().trim { it <= ' ' },
+                requestCode = SDK_ACTIVITY_REQ,
+                onLoadComplete = this::widgetInitializationComplete,
+                onLoadError = this::widgetInitializationError
+        )
     }
 
     private fun widgetInitializationComplete() {

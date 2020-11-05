@@ -30,8 +30,9 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
     private EditText passwordEditText;
     private EditText procedureIdEditText;
     private EditText languageEditText;
-    private EditText themeEditText;
     private EditText userInfoEditText;
+    private EditText themeEditText;
+    private EditText regionEditText;
     private View resultsView;
     private TextView resultsTextView;
     private TabLayout resultsTabLayout;
@@ -49,8 +50,9 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEditText);
         procedureIdEditText = findViewById(R.id.procedureIdEditText);
         languageEditText = findViewById(R.id.languageEditText);
-        themeEditText = findViewById(R.id.themeEditText);
         userInfoEditText = findViewById(R.id.userInfoEditText);
+        themeEditText = findViewById(R.id.themeEditText);
+        regionEditText = findViewById(R.id.regionEditText);
 
         resultsView = findViewById(R.id.resultsView);
         resultsTextView = findViewById(R.id.resultsTextView);
@@ -150,13 +152,14 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
 
         SenselyWidget.INSTANCE.initialize(
                 this,
-                SDK_ACTIVITY_REQ,
                 loginEditText.getText().toString().trim(),
                 passwordEditText.getText().toString().trim(),
                 procedureIdEditText.getText().toString().trim(),
                 languageEditText.getText().toString().trim(),
-                themeEditText.getText().toString().trim(),
                 userInfoEditText.getText().toString().trim(),
+                themeEditText.getText().toString().trim(),
+                regionEditText.getText().toString().trim(),
+                SDK_ACTIVITY_REQ,
                 this::widgetInitializationComplete,
                 this::widgetInitializationError
         );

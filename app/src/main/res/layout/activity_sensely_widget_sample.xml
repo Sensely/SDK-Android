@@ -126,17 +126,33 @@
                 android:text='{"userInfo":{"gender":"M","dob":"1980-10-30","orgId":"UniqueId11111"}}'/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/regionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userInfoLayout"
+            android:hint="Region">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/regionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:inputType="text"
+                android:text="us" /> <!-- Please contact Sensely support for correct region to use -->
+        </com.google.android.material.textfield.TextInputLayout>
+
         <Button
-            android:id="@+id/startSenselyWidget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:stateListAnimator="@null"
             android:text="Start Sensely Widget"
             android:onClick="startSenselyWidget"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/userInfoLayout"
+            app:layout_constraintTop_toBottomOf="@id/regionLayout"
             app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
