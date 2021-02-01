@@ -10,8 +10,8 @@ android {
         applicationId "com.sensely.sample"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 300901
-        versionName "3.9.1"
+        versionCode 300902
+        versionName "3.9.2"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -31,7 +31,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
