@@ -21,7 +21,6 @@ class SenselyWidgetSampleActivityKotlin : AppCompatActivity() {
     private lateinit var languageEditText: EditText
     private lateinit var userInfoEditText: EditText
     private lateinit var themeEditText: EditText
-    private lateinit var regionEditText: EditText
     private lateinit var resultsView: View
     private lateinit var resultsTextView: TextView
     private lateinit var resultsTabLayout: TabLayout
@@ -40,7 +39,6 @@ class SenselyWidgetSampleActivityKotlin : AppCompatActivity() {
         languageEditText = findViewById(R.id.languageEditText)
         userInfoEditText = findViewById(R.id.userInfoEditText)
         themeEditText = findViewById(R.id.themeEditText)
-        regionEditText = findViewById(R.id.regionEditText)
 
         resultsView = findViewById(R.id.resultsView)
         resultsTextView = findViewById(R.id.resultsTextView)
@@ -131,7 +129,6 @@ class SenselyWidgetSampleActivityKotlin : AppCompatActivity() {
                 language = languageEditText.text.toString().trim { it <= ' ' },
                 conversationData = userInfoEditText.text.toString().trim { it <= ' ' },
                 theme = themeEditText.text.toString().trim { it <= ' ' },
-                region = regionEditText.text.toString().trim { it <= ' ' },
                 requestCode = SDK_ACTIVITY_REQ,
                 onLoadComplete = this::widgetInitializationComplete,
                 onLoadError = this::widgetInitializationError

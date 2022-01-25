@@ -32,7 +32,6 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
     private EditText languageEditText;
     private EditText userInfoEditText;
     private EditText themeEditText;
-    private EditText regionEditText;
     private View resultsView;
     private TextView resultsTextView;
     private TabLayout resultsTabLayout;
@@ -52,7 +51,6 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
         languageEditText = findViewById(R.id.languageEditText);
         userInfoEditText = findViewById(R.id.userInfoEditText);
         themeEditText = findViewById(R.id.themeEditText);
-        regionEditText = findViewById(R.id.regionEditText);
 
         resultsView = findViewById(R.id.resultsView);
         resultsTextView = findViewById(R.id.resultsTextView);
@@ -158,7 +156,6 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
                 languageEditText.getText().toString().trim(),
                 userInfoEditText.getText().toString().trim(),
                 themeEditText.getText().toString().trim(),
-                regionEditText.getText().toString().trim(),
                 SDK_ACTIVITY_REQ,
                 this::widgetInitializationComplete,
                 this::widgetInitializationError
