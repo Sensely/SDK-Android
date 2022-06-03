@@ -2,20 +2,16 @@ package com.sensely.sdk.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.material.tabs.TabLayout;
-
 import com.sensely.sdk.api.SenselyWidget;
+import com.sensely.sdk.sample.databinding.ActivitySenselyWidgetSampleBinding;
 import com.sensely.sdk.utils.ExtendedDataHolder;
 
 import org.json.JSONObject;
@@ -26,53 +22,33 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
 
     private static final int SDK_ACTIVITY_REQ = 1234;
 
-    private EditText loginEditText;
-    private EditText passwordEditText;
-    private EditText procedureIdEditText;
-    private EditText languageEditText;
-    private EditText userInfoEditText;
-    private EditText themeEditText;
-    private View resultsView;
-    private TextView resultsTextView;
-    private TabLayout resultsTabLayout;
-    private FrameLayout progressBar;
-
     private String simplifiedResults;
     private String fullResults;
+
+    private ActivitySenselyWidgetSampleBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sensely_widget_sample);
 
-        loginEditText = findViewById(R.id.loginEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
-        procedureIdEditText = findViewById(R.id.procedureIdEditText);
-        languageEditText = findViewById(R.id.languageEditText);
-        userInfoEditText = findViewById(R.id.userInfoEditText);
-        themeEditText = findViewById(R.id.themeEditText);
+        binding = ActivitySenselyWidgetSampleBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        resultsView = findViewById(R.id.resultsView);
-        resultsTextView = findViewById(R.id.resultsTextView);
-
-        resultsTabLayout = findViewById(R.id.resultsTabLayout);
-        resultsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        binding.resultsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override public void onTabSelected(TabLayout.Tab tab) { switchTabContent(tab); }
             @Override public void onTabReselected(TabLayout.Tab tab) { switchTabContent(tab); }
             @Override public void onTabUnselected(TabLayout.Tab tab) { }
         });
 
-        progressBar = findViewById(R.id.progressBar);
-
         hideProgressBar();
     }
 
     public void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
+        binding.progressBar.setVisibility(View.VISIBLE);
     }
 
     public void hideProgressBar() {
-        progressBar.setVisibility(View.GONE);
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -99,10 +75,10 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
     private void switchTabContent(TabLayout.Tab tab) {
         switch (tab.getPosition()) {
             case 0:
-                resultsTextView.setText(simplifiedResults);
+                binding.resultsTextView.setText(simplifiedResults);
                 break;
             case 1:
-                resultsTextView.setText(fullResults);
+                binding.resultsTextView.setText(fullResults);
                 break;
         }
     }
@@ -120,7 +96,7 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (resultsView.getVisibility() == View.VISIBLE) {
+        if (binding.resultsView.getVisibility() == View.VISIBLE) {
             hideResultsView();
         } else {
             super.onBackPressed();
@@ -128,8 +104,8 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
     }
 
     private void showResultsView() {
-        resultsView.setVisibility(View.VISIBLE);
-        resultsTabLayout.selectTab(resultsTabLayout.getTabAt(0));
+        binding.resultsView.setVisibility(View.VISIBLE);
+        binding.resultsTabLayout.selectTab(binding.resultsTabLayout.getTabAt(0));
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -137,8 +113,8 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
     }
 
     private void hideResultsView() {
-        resultsView.setVisibility(View.GONE);
-        resultsTextView.setText("");
+        binding.resultsView.setVisibility(View.GONE);
+        binding.resultsTextView.setText("");
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -150,12 +126,13 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
 
         SenselyWidget.INSTANCE.initialize(
                 this,
-                loginEditText.getText().toString().trim(),
-                passwordEditText.getText().toString().trim(),
-                procedureIdEditText.getText().toString().trim(),
-                languageEditText.getText().toString().trim(),
-                userInfoEditText.getText().toString().trim(),
-                themeEditText.getText().toString().trim(),
+                binding.loginEditText.getText().toString().trim(),
+                binding.passwordEditText.getText().toString().trim(),
+                binding.procedureIdEditText.getText().toString().trim(),
+                binding.languageEditText.getText().toString().trim(),
+                binding.userInfoEditText.getText().toString().trim(),
+                binding.themeEditText.getText().toString().trim(),
+                binding.defaultAudioText.getText().toString().trim(),
                 SDK_ACTIVITY_REQ,
                 this::widgetInitializationComplete,
                 this::widgetInitializationError
@@ -188,6 +165,9 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
                 break;
             case SenselyWidget.SESSION_EXPIRED_ERROR:
                 errorMessage = "Session has expired";
+                break;
+            case SenselyWidget.UNKNOWN_ERROR:
+                errorMessage = "Error";
                 break;
         }
 

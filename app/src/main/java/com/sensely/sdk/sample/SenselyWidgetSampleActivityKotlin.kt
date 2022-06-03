@@ -1,7 +1,5 @@
 package com.sensely.sdk.sample
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -9,82 +7,42 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
 import com.sensely.sdk.api.SenselyWidget
-
-import com.sensely.sdk.utils.ExtendedDataHolder
-import org.json.JSONObject
+import com.sensely.sdk.sample.databinding.ActivitySenselyWidgetSampleBinding
 
 class SenselyWidgetSampleActivityKotlin : AppCompatActivity() {
-
-    private lateinit var loginEditText: EditText
-    private lateinit var passwordEditText: EditText
-    private lateinit var procedureIdEditText: EditText
-    private lateinit var languageEditText: EditText
-    private lateinit var userInfoEditText: EditText
-    private lateinit var themeEditText: EditText
-    private lateinit var resultsView: View
-    private lateinit var resultsTextView: TextView
-    private lateinit var resultsTabLayout: TabLayout
-    private lateinit var progressBar: FrameLayout
 
     private var simplifiedResults: String = ""
     private var fullResults: String = ""
 
+    private lateinit var binding: ActivitySenselyWidgetSampleBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sensely_widget_sample)
 
-        loginEditText = findViewById(R.id.loginEditText)
-        passwordEditText = findViewById(R.id.passwordEditText)
-        procedureIdEditText = findViewById(R.id.procedureIdEditText)
-        languageEditText = findViewById(R.id.languageEditText)
-        userInfoEditText = findViewById(R.id.userInfoEditText)
-        themeEditText = findViewById(R.id.themeEditText)
+        binding = ActivitySenselyWidgetSampleBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        resultsView = findViewById(R.id.resultsView)
-        resultsTextView = findViewById(R.id.resultsTextView)
-
-        resultsTabLayout = findViewById(R.id.resultsTabLayout)
-        resultsTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.resultsTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) { switchTabContent(tab) }
             override fun onTabReselected(tab: TabLayout.Tab?) { switchTabContent(tab) }
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
         })
 
-        progressBar = findViewById(R.id.progressBar)
-
         hideProgressBar()
     }
 
     private fun showProgressBar() {
-        progressBar.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     private fun hideProgressBar() {
-        progressBar.visibility = View.GONE
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == SDK_ACTIVITY_REQ && resultCode == Activity.RESULT_OK) {
-            val extras = ExtendedDataHolder.getInstance()
-            if (extras.hasExtra("result")) {
-                fullResults = extras.getExtra("result") as String
-                extras.removeExtra("result")
-
-                try {
-                    val jsonResponse = JSONObject(fullResults)
-                    simplifiedResults = jsonResponse.getString("conversationOutput")
-                } catch (e: Exception) { }
-
-                showResultsView()
-            }
-        }
+        binding.progressBar.visibility = View.GONE
     }
 
     private fun switchTabContent(tab: TabLayout.Tab?) {
         when (tab?.position) {
-            0 -> resultsTextView.text = simplifiedResults
-            1 -> resultsTextView.text = fullResults
+            0 -> binding.resultsTextView.text = simplifiedResults
+            1 -> binding.resultsTextView.text = fullResults
         }
     }
 
@@ -99,7 +57,7 @@ class SenselyWidgetSampleActivityKotlin : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (resultsView.visibility == View.VISIBLE) {
+        if (binding.resultsView.visibility == View.VISIBLE) {
             hideResultsView()
         } else {
             super.onBackPressed()
@@ -107,14 +65,14 @@ class SenselyWidgetSampleActivityKotlin : AppCompatActivity() {
     }
 
     private fun showResultsView() {
-        resultsView.visibility = View.VISIBLE
-        resultsTabLayout.selectTab(resultsTabLayout.getTabAt(0))
+        binding.resultsView.visibility = View.VISIBLE
+        binding.resultsTabLayout.selectTab(binding.resultsTabLayout.getTabAt(0))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun hideResultsView() {
-        resultsView.visibility = View.GONE
-        resultsTextView.text = ""
+        binding.resultsView.visibility = View.GONE
+        binding.resultsTextView.text = ""
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
@@ -122,17 +80,27 @@ class SenselyWidgetSampleActivityKotlin : AppCompatActivity() {
         showProgressBar()
 
         SenselyWidget.initialize(
-                context = this,
-                userName = loginEditText.text.toString().trim { it <= ' ' },
-                password = passwordEditText.text.toString().trim { it <= ' ' },
-                procedureId = procedureIdEditText.text.toString().trim { it <= ' ' },
-                language = languageEditText.text.toString().trim { it <= ' ' },
-                conversationData = userInfoEditText.text.toString().trim { it <= ' ' },
-                theme = themeEditText.text.toString().trim { it <= ' ' },
-                requestCode = SDK_ACTIVITY_REQ,
-                onLoadComplete = this::widgetInitializationComplete,
-                onLoadError = this::widgetInitializationError
+            context = this,
+            launcher = senselyActivityLauncher,
+            userName = binding.loginEditText.text.toString().trim { it <= ' ' },
+            password = binding.passwordEditText.text.toString().trim { it <= ' ' },
+            procedureId = binding.procedureIdEditText.text.toString().trim { it <= ' ' },
+            language = binding.languageEditText.text.toString().trim { it <= ' ' },
+            conversationData = binding.userInfoEditText.text.toString().trim { it <= ' ' },
+            theme = binding.themeEditText.text.toString().trim { it <= ' ' },
+            defaultAudio = binding.defaultAudioText.text.toString().trim { it <= ' ' },
+            onLoadComplete = this::widgetInitializationComplete,
+            onLoadError = this::widgetInitializationError
         )
+    }
+
+    private val senselyActivityLauncher = registerForActivityResult(SenselyWidget.SenselyActivityContract()) { result ->
+        result?.let {
+            this.fullResults = it.fullResults
+            this.simplifiedResults = it.simplifiedResults
+        }
+
+        showResultsView()
     }
 
     private fun widgetInitializationComplete() {
@@ -150,13 +118,10 @@ class SenselyWidgetSampleActivityKotlin : AppCompatActivity() {
             SenselyWidget.EMPTY_ASSESSMENT_LIST_ERROR -> errorMessage = "There are no assessments for this user"
             SenselyWidget.INVALID_PROCEDURE_ID_ERROR -> errorMessage = "Incorrect Procedure Id"
             SenselyWidget.SESSION_EXPIRED_ERROR -> errorMessage = "Session has expired"
+            SenselyWidget.UNKNOWN_ERROR -> errorMessage = "Error"
         }
 
         Toast.makeText(this@SenselyWidgetSampleActivityKotlin, errorMessage,
-                Toast.LENGTH_LONG).show()
-    }
-
-    companion object {
-        private const val SDK_ACTIVITY_REQ = 1234
+            Toast.LENGTH_LONG).show()
     }
 }
