@@ -135,7 +135,8 @@ public class SenselyWidgetSampleActivityJava extends AppCompatActivity {
                 binding.defaultAudioText.getText().toString().trim(),
                 SDK_ACTIVITY_REQ,
                 this::widgetInitializationComplete,
-                this::widgetInitializationError
+                this::widgetInitializationError,
+                false
         );
     }
 
