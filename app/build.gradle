@@ -10,8 +10,8 @@ android {
         applicationId "com.sensely.sample"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 301300
-        versionName "3.13"
+        versionCode 301301
+        versionName "3.13.1"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -68,5 +68,5 @@ dependencies {
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation "com.sensely:sdk:3.13"
+    implementation "com.sensely:sdk:3.13.1"
 }
